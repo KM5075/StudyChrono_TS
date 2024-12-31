@@ -7,6 +7,7 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
   WORKING_DIRECTORY: StudyChrono_TS.Server
+  SERVER_TEST_DIRECTORY: StudyChrono_TS.Server.Tests
 jobs:
   build:
     runs-on: windows-latest
@@ -21,7 +22,7 @@ jobs:
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+      run: dotnet test "${{ env.SERVER_TEST_DIRECTORY }}"
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Publish Artifacts
