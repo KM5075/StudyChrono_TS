@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyChrono_TS.Server", "StudyChrono_TS.Server\StudyChrono_TS.Server.csproj", "{7121B760-6588-4BCE-AC88-679BD821B592}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "studychrono_ts.client", "studychrono_ts.client\studychrono_ts.client.esproj", "{13A5278D-4812-464B-9884-64AB13016EFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7121B760-6588-4BCE-AC88-679BD821B592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7121B760-6588-4BCE-AC88-679BD821B592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7121B760-6588-4BCE-AC88-679BD821B592}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7121B760-6588-4BCE-AC88-679BD821B592}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13A5278D-4812-464B-9884-64AB13016EFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13A5278D-4812-464B-9884-64AB13016EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13A5278D-4812-464B-9884-64AB13016EFA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{13A5278D-4812-464B-9884-64AB13016EFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13A5278D-4812-464B-9884-64AB13016EFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13A5278D-4812-464B-9884-64AB13016EFA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D5F4AB75-A51F-4E43-950F-C6BAA6AF7D80}
+	EndGlobalSection
+EndGlobal

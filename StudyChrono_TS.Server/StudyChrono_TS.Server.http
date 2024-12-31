@@ -1,0 +1,6 @@
+@StudyChrono_TS.Server_HostAddress = http://localhost:5049
+
+GET {{StudyChrono_TS.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
