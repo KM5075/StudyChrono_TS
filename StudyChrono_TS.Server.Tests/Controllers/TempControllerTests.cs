@@ -22,6 +22,6 @@ public class TempControllerTests
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual("Hello World!", result.Value);
+        Assert.AreEqual("Hello World!1111", result.Value);
     }
 }
