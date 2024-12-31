@@ -4,11 +4,15 @@
 
 ## Features
 
-- [ ] React+TypeScriptの開発環境をViteで用意する
-- [ ] Azure App Serviceにデプロイする
+- [x] React+TypeScriptの開発環境をViteで用意する
+- [x] Azure App Serviceにデプロイする
 - [ ] Jestとreact-testing-libraryを導入する
     - [ ] コンポーネントテストをサンプルで作成して動くことを確認
-- [ ] Github Actions(Push)でCI/CDできる
+    - [ ] GitHub Actionsでテストを自動実行する
+- [ ] MSTestを導入する
+    - [ ] サーバのテストをサンプルで作成して動くことを確認
+    - [ ] GitHub Actionsでテストを自動実行する
+- [x] Github Actions(Push)でCDできる
 - [ ] ChakuraUIを導入する
 - [ ] ユーザーはタイトルをみることができる
 - [ ] EF Coreの初期設定をする
