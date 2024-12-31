@@ -9,9 +9,9 @@
 - [ ] Jestとreact-testing-libraryを導入する
     - [ ] コンポーネントテストをサンプルで作成して動くことを確認
     - [ ] GitHub Actionsでテストを自動実行する
-- [ ] MSTestを導入する
-    - [ ] サーバのテストをサンプルで作成して動くことを確認
-    - [ ] GitHub Actionsでテストを自動実行する
+- [x] MSTestを導入する
+    - [x] サーバのテストをサンプルで作成して動くことを確認
+    - [x] GitHub Actionsでテストを自動実行する
 - [x] Github Actions(Push)でCDできる
 - [ ] ChakuraUIを導入する
 - [ ] ユーザーはタイトルをみることができる
