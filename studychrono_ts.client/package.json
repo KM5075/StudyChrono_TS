@@ -11,7 +11,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "jest-editor-support": "^32.0.0-beta.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "vite-plugin-mkcert": "^1.17.6"
