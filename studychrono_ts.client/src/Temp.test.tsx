@@ -11,6 +11,6 @@ describe("サンプルテスト", () => {
         render(<Temp />);
 
         // 検証
-        expect(screen.getByText("Hello world! aaa")).toBeInTheDocument();
+        expect(screen.getByText("Hello world!")).toBeInTheDocument();
     });
 });
