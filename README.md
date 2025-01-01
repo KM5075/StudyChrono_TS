@@ -13,7 +13,7 @@
     - [x] サーバのテストをサンプルで作成して動くことを確認
     - [x] GitHub Actionsでテストを自動実行する
 - [x] Github Actions(Push)でCDできる
-- [ ] ChakuraUIを導入する
+- [x] ChakuraUIを導入する
 - [ ] ユーザーはタイトルをみることができる
 - [ ] EF Coreの初期設定をする
 - [ ] ユーザーは学習記録一覧をみることができる
