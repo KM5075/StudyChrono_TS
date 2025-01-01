@@ -21,7 +21,13 @@ jobs:
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - name: Test
+    - name: Client Side Test
+      run: |
+          cd .\ReactApp11.client\
+          npm install
+          npm i && npm run build --if-present
+          npm test
+    - name: Server Side Test
       run: dotnet test "${{ env.SERVER_TEST_DIRECTORY }}"
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
