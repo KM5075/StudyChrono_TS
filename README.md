@@ -6,9 +6,9 @@
 
 - [x] React+TypeScriptの開発環境をViteで用意する
 - [x] Azure App Serviceにデプロイする
-- [ ] Jestとreact-testing-libraryを導入する
-    - [ ] コンポーネントテストをサンプルで作成して動くことを確認
-    - [ ] GitHub Actionsでテストを自動実行する
+- [x] Jestとreact-testing-libraryを導入する
+    - [x] コンポーネントテストをサンプルで作成して動くことを確認
+    - [x] GitHub Actionsでテストを自動実行する
 - [x] MSTestを導入する
     - [x] サーバのテストをサンプルで作成して動くことを確認
     - [x] GitHub Actionsでテストを自動実行する
