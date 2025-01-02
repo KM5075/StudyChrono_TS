@@ -28,9 +28,8 @@ const studyRecordsFakeData: Array<StudyRecord> = [
     },
 ];
 
-
 function App() {
-    const { register, handleSubmit, formState: { errors } , reset } = useForm<StudyRecord>({
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<StudyRecord>({
         criteriaMode: "all",
         defaultValues: {
             id: 0,
@@ -45,6 +44,16 @@ function App() {
         setStudyRecords([...studyRecords, data]);
         reset();
     })
+
+    const onClickDelete = (id: number) => {
+        const newStudyRecords = studyRecords.filter((record) => record.id !== id);
+        setStudyRecords(newStudyRecords);
+        toaster.create({
+            title: "削除完了",
+            description: "学習記録を削除しました",
+            type: "success",
+        });
+    }
 
     return (
         <>
@@ -67,7 +76,7 @@ function App() {
                                 <Table.Cell>{record.title}</Table.Cell>
                                 <Table.Cell>{record.studyTime}</Table.Cell>
                                 <Table.Cell><PrimaryButton>編集</PrimaryButton></Table.Cell>
-                                <Table.Cell><PrimaryButton>削除</PrimaryButton></Table.Cell>
+                                <Table.Cell><PrimaryButton onClick={() => onClickDelete(record.id)}>削除</PrimaryButton></Table.Cell>
                             </Table.Row>
                         ))}
                     </Table.Body>
