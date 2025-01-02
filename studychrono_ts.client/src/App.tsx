@@ -1,26 +1,11 @@
-import { Box, ChakraProvider, Heading, Input, Table, useDisclosure } from '@chakra-ui/react';
+import { ChakraProvider, Heading, Table, useDisclosure } from '@chakra-ui/react';
 import theme from './theme/theme';
 import PrimaryButton from './components/atoms/PrimaryButton';
 import { StudyRecord } from './types/api/StudyRecord';
-import { Field } from './components/ui/field';
 import { useState, } from 'react';
 import { toaster, Toaster } from './components/ui/toaster';
 import { useForm } from 'react-hook-form';
-import { Button } from './components/ui/button';
-
-import {
-    DialogActionTrigger,
-    DialogBody,
-    DialogCloseTrigger,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogRoot,
-    DialogTitle,
-    DialogTrigger,
-} from "./components/ui/dialog"
-
-
+import StudyRecordDetail from './components/organisms/StudyRecordDetail';
 
 const studyRecordsFakeData: Array<StudyRecord> = [
     {
@@ -41,6 +26,7 @@ const studyRecordsFakeData: Array<StudyRecord> = [
 ];
 
 function App() {
+    const [onSubmit, setOnSubmit] = useState<() => void>(() => {});
     const { register, handleSubmit, formState: { errors }, reset } = useForm<StudyRecord>({
         criteriaMode: "all",
         defaultValues: {
@@ -53,11 +39,52 @@ function App() {
     const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>(studyRecordsFakeData);
     const { open, onOpen, onClose, onToggle } = useDisclosure();
 
-    const onSubmit = handleSubmit((data: StudyRecord) => {
+    const onSubmitAdd = handleSubmit((data: StudyRecord) => {
+        data.id = studyRecords.length + 1;
         setStudyRecords([...studyRecords, data]);
         reset();
+        onClose();
+        toaster.create({
+            title: "新規登録",
+            description: "学習記録を新規登録しました。",
+            type: "success",
+        });
     })
 
+    const onSubmitEdit = handleSubmit((data: StudyRecord) => {
+        const newStudyRecords = studyRecords.map((record) => {
+            if (record.id === data.id) {
+                return data;
+            }
+            return record;
+        });
+        setStudyRecords(newStudyRecords);
+        onClose();
+        toaster.create({
+            title: "更新完了",
+            description: "学習記録を更新しました",
+            type: "success",
+        });
+    });
+
+    const onClickEdit = (id: number) => {
+        const targetRecord = studyRecords.find((record) => record.id === id);
+        if (targetRecord) {
+            setOnSubmit(() => onSubmitEdit);
+            reset(targetRecord);
+            onOpen();
+        }
+    }
+
+    const onClickAdd = () => {
+        setOnSubmit(() => onSubmitAdd);
+        reset({
+            id: 0,
+            title: "",
+            studyTime: 0,
+        });
+        onOpen();
+    }
 
     const onClickDelete = (id: number) => {
         const newStudyRecords = studyRecords.filter((record) => record.id !== id);
@@ -89,51 +116,15 @@ function App() {
                             <Table.Row key={record.id}>
                                 <Table.Cell>{record.title}</Table.Cell>
                                 <Table.Cell>{record.studyTime}</Table.Cell>
-                                <Table.Cell><PrimaryButton>編集</PrimaryButton></Table.Cell>
+                                <Table.Cell><PrimaryButton onClick={() => onClickEdit(record.id)}>編集</PrimaryButton></Table.Cell>
                                 <Table.Cell><PrimaryButton onClick={() => onClickDelete(record.id)}>削除</PrimaryButton></Table.Cell>
                             </Table.Row>
                         ))}
                     </Table.Body>
                 </Table.Root>
                 <br />
-
-
-                <DialogRoot open={open} onOpenChange={onToggle}>
-                    <DialogTrigger asChild>
-                        <PrimaryButton>新規登録</PrimaryButton>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>新規登録</DialogTitle>
-                        </DialogHeader>
-                        <DialogBody>
-                            <form onSubmit={onSubmit}>
-                                <Field label="Title" invalid={!!errors.title} errorText={errors.title?.message}>
-                                    <Input bg="white" placeholder="Study Title"
-                                        {...register("title", {
-                                            required: "Title is required",
-                                        })} />
-                                </Field>
-                                <Field label="Time(h)" invalid={!!errors.studyTime} errorText={errors.studyTime?.message}>
-                                    <Input bg="white" placeholder="Time" type="number"
-                                        {...register("studyTime", {
-                                            required: { value: true, message: "Study Time is required" },
-                                            min: { value: 1, message: "Time must be greater than 0" }
-                                        })} />
-                                </Field>
-                                <br />
-                                <Button type="submit" bg="teal" color="white">登録</Button>
-                            </form>
-                        </DialogBody>
-                        <DialogFooter>
-                            <DialogActionTrigger asChild>
-                                <Button variant="outline">Cancel</Button>
-                            </DialogActionTrigger>
-                            <Button>Save</Button>
-                        </DialogFooter>
-                        <DialogCloseTrigger />
-                    </DialogContent>
-                </DialogRoot>
+                <PrimaryButton onClick={ onClickAdd }>新規登録</PrimaryButton>
+                <StudyRecordDetail open={open} onToggle={onToggle} onSubmit={onSubmit} errors={errors} register={register} />
             </ChakraProvider>
         </>
     );
