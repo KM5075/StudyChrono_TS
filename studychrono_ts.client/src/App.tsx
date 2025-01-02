@@ -4,6 +4,7 @@ import PrimaryButton from './components/atoms/PrimaryButton';
 import { StudyRecord } from './types/api/StudyRecord';
 import { Field } from './components/ui/field';
 import { useState } from 'react';
+import { toaster, Toaster } from './components/ui/toaster';
 
 
 
@@ -36,6 +37,25 @@ function App() {
     const onChangeStudyTime = (e: React.ChangeEvent<HTMLInputElement>) => { setStudyTime(Number(e.target.value)); }
 
     const onClickAddRecord = () => {
+        // バリデーション
+        if (studyTitle === "" ) {
+            toaster.create({
+                title: "エラー",
+                description: "内容の入力は必須です。",
+                type: "error"
+            });
+            return;
+        }
+
+        if(studyTime <= 0) {
+            toaster.create({
+                title: "エラー",
+                description: "時間は1以上の数字を入力してください。",
+                type: "error"
+            });
+            return;
+        }
+
         const newRecord: StudyRecord = {
             id: studyRecords.length+1,// サーバー側でIDを振るため仮の値
             title: studyTitle,
@@ -49,6 +69,7 @@ function App() {
     return (
         <>
             <ChakraProvider value={theme}>
+                <Toaster />
                 <br />
                 <Heading as="h1" fontSize="5xl" fontWeight="bold">Study Chrono</Heading>
                 <br />
