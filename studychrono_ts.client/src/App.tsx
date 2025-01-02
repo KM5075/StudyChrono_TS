@@ -1,4 +1,4 @@
-import { Box, Button, ChakraProvider, Heading, Input, Table } from '@chakra-ui/react';
+import { Box, ChakraProvider, Heading, Input, Table } from '@chakra-ui/react';
 import theme from './theme/theme';
 import PrimaryButton from './components/atoms/PrimaryButton';
 import { StudyRecord } from './types/api/StudyRecord';
@@ -7,19 +7,19 @@ import { useState } from 'react';
 
 
 
-const studyRecords: Array<StudyRecord> = [
+const studyRecordsFakeData: Array<StudyRecord> = [
     {
-        id: '1',
+        id: 1,
         title: 'TypeScript',
         studyTime: 1,
     },
     {
-        id: '2',
+        id: 2,
         title: 'React',
         studyTime: 2,
     },
     {
-        id: '3',
+        id: 3,
         title: 'Next.js',
         studyTime: 3,
     },
@@ -27,6 +27,25 @@ const studyRecords: Array<StudyRecord> = [
 
 
 function App() {
+
+    const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>(studyRecordsFakeData);
+    const [studyTitle, setStudyTitle] = useState<string>("");
+    const [studyTime, setStudyTime] = useState<number>(0);
+
+    const onChangeStudyTitle = (e: React.ChangeEvent<HTMLInputElement>) => { setStudyTitle(e.target.value); }
+    const onChangeStudyTime = (e: React.ChangeEvent<HTMLInputElement>) => { setStudyTime(Number(e.target.value)); }
+
+    const onClickAddRecord = () => {
+        const newRecord: StudyRecord = {
+            id: studyRecords.length+1,// サーバー側でIDを振るため仮の値
+            title: studyTitle,
+            studyTime: studyTime,
+        }
+        setStudyRecords([...studyRecords, newRecord]);
+        setStudyTitle("");
+        setStudyTime(0);
+    }
+
     return (
         <>
             <ChakraProvider value={theme}>
@@ -51,9 +70,17 @@ function App() {
                     </Table.Body>
                 </Table.Root>
                 <br />
-                <br />Button, 
-                <Button bg={"teal"}>Click me</Button>
-                <PrimaryButton>Click me primary</PrimaryButton>
+
+                <Box>
+                    <h2 style={{ fontWeight: "bold", fontSize: "lg" }}>学習記録登録</h2>
+                    <Field label="Title">
+                        <Input bg="white" placeholder="Study Title" value={studyTitle} onChange={onChangeStudyTitle} />
+                    </Field>
+                    <Field label="Time(h)">
+                        <Input bg="white" placeholder="Time" value={studyTime} onChange={onChangeStudyTime} type='number' />
+                    </Field>
+                </Box>
+                <PrimaryButton onClick={ onClickAddRecord}>登録</PrimaryButton>
             </ChakraProvider>
         </>
     );

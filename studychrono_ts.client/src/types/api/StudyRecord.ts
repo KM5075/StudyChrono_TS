@@ -1,5 +1,5 @@
 export type StudyRecord = {
-    id: string;
+    id: number;
     title: string;
     studyTime: number;
 };
