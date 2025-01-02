@@ -1,6 +1,6 @@
-import { ChakraProvider, Heading } from '@chakra-ui/react';
+import { Button, ChakraProvider, Heading } from '@chakra-ui/react';
 import theme from './theme/theme';
-import { Button } from './components/ui/button';
+import PrimaryButton from './components/atoms/PrimaryButton';
 
 function App() {
     return (
@@ -10,8 +10,9 @@ function App() {
                 <Heading as="h1" fontSize="5xl" fontWeight="bold">Study Chrono</Heading>
                 <br />
                 <br />
-                <br />
+                <br />Button, 
                 <Button bg={"teal"}>Click me</Button>
+                <PrimaryButton>Click me primary</PrimaryButton>
             </ChakraProvider>
         </>
     );
