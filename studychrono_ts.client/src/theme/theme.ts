@@ -3,7 +3,7 @@ import { createSystem, defaultConfig } from '@chakra-ui/react';
 const theme = createSystem(defaultConfig, {
     globalCss: {
         body: {
-            bg: 'gray.100',
+            bg: 'gray.50',
             color: 'gray.800',
         },
     },
