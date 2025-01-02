@@ -3,8 +3,10 @@ import theme from './theme/theme';
 import PrimaryButton from './components/atoms/PrimaryButton';
 import { StudyRecord } from './types/api/StudyRecord';
 import { Field } from './components/ui/field';
-import { useState } from 'react';
+import { useState, } from 'react';
 import { toaster, Toaster } from './components/ui/toaster';
+import { useForm } from 'react-hook-form';
+import { Button } from './components/ui/button';
 
 
 
@@ -28,43 +30,21 @@ const studyRecordsFakeData: Array<StudyRecord> = [
 
 
 function App() {
+    const { register, handleSubmit, formState: { errors } , reset } = useForm<StudyRecord>({
+        criteriaMode: "all",
+        defaultValues: {
+            id: 0,
+            title: "",
+            studyTime: 0,
+        },
+    });
 
     const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>(studyRecordsFakeData);
-    const [studyTitle, setStudyTitle] = useState<string>("");
-    const [studyTime, setStudyTime] = useState<number>(0);
 
-    const onChangeStudyTitle = (e: React.ChangeEvent<HTMLInputElement>) => { setStudyTitle(e.target.value); }
-    const onChangeStudyTime = (e: React.ChangeEvent<HTMLInputElement>) => { setStudyTime(Number(e.target.value)); }
-
-    const onClickAddRecord = () => {
-        // バリデーション
-        if (studyTitle === "" ) {
-            toaster.create({
-                title: "エラー",
-                description: "内容の入力は必須です。",
-                type: "error"
-            });
-            return;
-        }
-
-        if(studyTime <= 0) {
-            toaster.create({
-                title: "エラー",
-                description: "時間は1以上の数字を入力してください。",
-                type: "error"
-            });
-            return;
-        }
-
-        const newRecord: StudyRecord = {
-            id: studyRecords.length+1,// サーバー側でIDを振るため仮の値
-            title: studyTitle,
-            studyTime: studyTime,
-        }
-        setStudyRecords([...studyRecords, newRecord]);
-        setStudyTitle("");
-        setStudyTime(0);
-    }
+    const onSubmit = handleSubmit((data: StudyRecord) => {
+        setStudyRecords([...studyRecords, data]);
+        reset();
+    })
 
     return (
         <>
@@ -92,16 +72,25 @@ function App() {
                 </Table.Root>
                 <br />
 
-                <Box>
+
+                <form onSubmit={onSubmit}>
                     <h2 style={{ fontWeight: "bold", fontSize: "lg" }}>学習記録登録</h2>
-                    <Field label="Title">
-                        <Input bg="white" placeholder="Study Title" value={studyTitle} onChange={onChangeStudyTitle} />
+                    <Field label="Title" invalid={!!errors.title} errorText={errors.title?.message}>
+                        <Input bg="white" placeholder="Study Title"
+                            {...register("title", {
+                                required: "Title is required",
+                            })} />
                     </Field>
-                    <Field label="Time(h)">
-                        <Input bg="white" placeholder="Time" value={studyTime} onChange={onChangeStudyTime} type='number' />
+                    <Field label="Time(h)" invalid={!!errors.studyTime} errorText={errors.studyTime?.message}>
+                        <Input bg="white" placeholder="Time" type="number"
+                            {...register("studyTime", {
+                                required: { value: true, message: "Study Time is required" },
+                                min: { value: 1, message: "Time must be greater than 0" }
+                            })} />
                     </Field>
-                </Box>
-                <PrimaryButton onClick={ onClickAddRecord}>登録</PrimaryButton>
+                    <br />
+                    <Button type="submit" bg="teal" color="white">登録</Button>
+                </form>
             </ChakraProvider>
         </>
     );
