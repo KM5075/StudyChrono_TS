@@ -1,4 +1,4 @@
-import { Box, ChakraProvider, Heading, Input, Table } from '@chakra-ui/react';
+import { Box, ChakraProvider, Heading, Input, Table, useDisclosure } from '@chakra-ui/react';
 import theme from './theme/theme';
 import PrimaryButton from './components/atoms/PrimaryButton';
 import { StudyRecord } from './types/api/StudyRecord';
@@ -7,6 +7,18 @@ import { useState, } from 'react';
 import { toaster, Toaster } from './components/ui/toaster';
 import { useForm } from 'react-hook-form';
 import { Button } from './components/ui/button';
+
+import {
+    DialogActionTrigger,
+    DialogBody,
+    DialogCloseTrigger,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogRoot,
+    DialogTitle,
+    DialogTrigger,
+} from "./components/ui/dialog"
 
 
 
@@ -39,11 +51,13 @@ function App() {
     });
 
     const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>(studyRecordsFakeData);
+    const { open, onOpen, onClose, onToggle } = useDisclosure();
 
     const onSubmit = handleSubmit((data: StudyRecord) => {
         setStudyRecords([...studyRecords, data]);
         reset();
     })
+
 
     const onClickDelete = (id: number) => {
         const newStudyRecords = studyRecords.filter((record) => record.id !== id);
@@ -84,24 +98,42 @@ function App() {
                 <br />
 
 
-                <form onSubmit={onSubmit}>
-                    <h2 style={{ fontWeight: "bold", fontSize: "lg" }}>学習記録登録</h2>
-                    <Field label="Title" invalid={!!errors.title} errorText={errors.title?.message}>
-                        <Input bg="white" placeholder="Study Title"
-                            {...register("title", {
-                                required: "Title is required",
-                            })} />
-                    </Field>
-                    <Field label="Time(h)" invalid={!!errors.studyTime} errorText={errors.studyTime?.message}>
-                        <Input bg="white" placeholder="Time" type="number"
-                            {...register("studyTime", {
-                                required: { value: true, message: "Study Time is required" },
-                                min: { value: 1, message: "Time must be greater than 0" }
-                            })} />
-                    </Field>
-                    <br />
-                    <Button type="submit" bg="teal" color="white">登録</Button>
-                </form>
+                <DialogRoot open={open} onOpenChange={onToggle}>
+                    <DialogTrigger asChild>
+                        <PrimaryButton>新規登録</PrimaryButton>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>新規登録</DialogTitle>
+                        </DialogHeader>
+                        <DialogBody>
+                            <form onSubmit={onSubmit}>
+                                <Field label="Title" invalid={!!errors.title} errorText={errors.title?.message}>
+                                    <Input bg="white" placeholder="Study Title"
+                                        {...register("title", {
+                                            required: "Title is required",
+                                        })} />
+                                </Field>
+                                <Field label="Time(h)" invalid={!!errors.studyTime} errorText={errors.studyTime?.message}>
+                                    <Input bg="white" placeholder="Time" type="number"
+                                        {...register("studyTime", {
+                                            required: { value: true, message: "Study Time is required" },
+                                            min: { value: 1, message: "Time must be greater than 0" }
+                                        })} />
+                                </Field>
+                                <br />
+                                <Button type="submit" bg="teal" color="white">登録</Button>
+                            </form>
+                        </DialogBody>
+                        <DialogFooter>
+                            <DialogActionTrigger asChild>
+                                <Button variant="outline">Cancel</Button>
+                            </DialogActionTrigger>
+                            <Button>Save</Button>
+                        </DialogFooter>
+                        <DialogCloseTrigger />
+                    </DialogContent>
+                </DialogRoot>
             </ChakraProvider>
         </>
     );
