@@ -66,6 +66,8 @@ function App() {
                             <Table.Row key={record.id}>
                                 <Table.Cell>{record.title}</Table.Cell>
                                 <Table.Cell>{record.studyTime}</Table.Cell>
+                                <Table.Cell><PrimaryButton>編集</PrimaryButton></Table.Cell>
+                                <Table.Cell><PrimaryButton>削除</PrimaryButton></Table.Cell>
                             </Table.Row>
                         ))}
                     </Table.Body>
