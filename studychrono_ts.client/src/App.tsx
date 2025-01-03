@@ -109,6 +109,8 @@ function App() {
                         <Table.Row>
                             <Table.ColumnHeader>Title</Table.ColumnHeader>
                             <Table.ColumnHeader>Study Time(h)</Table.ColumnHeader>
+                            <Table.ColumnHeader></Table.ColumnHeader>
+                            <Table.ColumnHeader></Table.ColumnHeader>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>

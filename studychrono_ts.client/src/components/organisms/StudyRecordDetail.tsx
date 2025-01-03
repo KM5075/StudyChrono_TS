@@ -10,10 +10,8 @@ import {
     DialogFooter,
     DialogHeader,
     DialogRoot,
-    DialogTitle,
-    DialogTrigger,
+    DialogTitle
 } from "../ui/dialog"
-import PrimaryButton from "../atoms/PrimaryButton";
 import { Field } from "../ui/field";
 import { Button } from "../ui/button";
 import { StudyRecord } from "../../types/api/StudyRecord";
