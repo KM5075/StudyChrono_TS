@@ -92,7 +92,48 @@ public class StudyRecordControllerTests
     {
         // Arrange
         var mockRepository = new Mock<IRepositories>();
-        //mockRepository.Setup(repo => repo.UpdateStudyRecord(It.IsAny<int>(), It.IsAny<StudyRecord>())).ReturnsAsync(new StudyRecord() { Id = 2, Title = "StudyRecord1", StudyTime = 10 });
+        mockRepository.Setup(repo => repo.FindStudyRecord(It.IsAny<int>())).ReturnsAsync(true);
+        mockRepository.Setup(repo => repo.UpdateStudyRecord(It.IsAny<StudyRecord>())).ReturnsAsync(new StudyRecord() { Id = 1, Title = "StudyRecord1", StudyTime = 10 });
+        var controller = new StudyRecordController(mockRepository.Object);
+        var record = new StudyRecord() { Id = 1, Title = "StudyRecord1", StudyTime = 10 };
+
+        // Act
+        ActionResult<StudyRecord> result = await controller.UpdateStudyRecord(1, record);
+        var updatedRecord = result.Value as StudyRecord;
+        var statusCode = ApiTestHelper.GetStatusCode(result);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual((int)HttpStatusCode.OK, statusCode);
+        Assert.IsNotNull(updatedRecord);
+        Assert.AreEqual(1, updatedRecord.Id);
+        Assert.AreEqual("StudyRecord1", updatedRecord.Title);
+        Assert.AreEqual(10, updatedRecord.StudyTime);
+    }
+
+    [TestMethod()]
+    public async Task UpdateStudyRecord_BadRequest()
+    {
+        // Arrange
+        var mockRepository = new Mock<IRepositories>();
+        var controller = new StudyRecordController(mockRepository.Object);
+        var record = new StudyRecord() { Id = 1, Title = "StudyRecord1", StudyTime = 10 };
+
+        // Act
+        ActionResult<StudyRecord> result = await controller.UpdateStudyRecord(2, record);
+        var statusCode = ApiTestHelper.GetStatusCode(result);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual((int)HttpStatusCode.NotFound, statusCode);
+    }
+
+    [TestMethod()]
+    public async Task UpdateStudyRecord_NotFound()
+    {
+        // Arrange
+        var mockRepository = new Mock<IRepositories>();
+        mockRepository.Setup(repo => repo.FindStudyRecord(It.IsAny<int>())).ReturnsAsync(false);
         var controller = new StudyRecordController(mockRepository.Object);
         var record = new StudyRecord() { Id = 1, Title = "StudyRecord1", StudyTime = 10 };
 
@@ -102,7 +143,7 @@ public class StudyRecordControllerTests
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual((int)HttpStatusCode.OK, statusCode);
+        Assert.AreEqual((int)HttpStatusCode.NotFound, statusCode);
     }
 
     [TestMethod()]

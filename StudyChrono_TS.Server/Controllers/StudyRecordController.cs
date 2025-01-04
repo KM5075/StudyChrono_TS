@@ -42,9 +42,22 @@ public class StudyRecordController : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<StudyRecord>> UpdateStudyRecord(int id, StudyRecord record)
     {
-        throw new NotImplementedException();
+        var exist = await _repositories.FindStudyRecord(id);
+        if (!exist)
+        {
+            return NotFound();
+        }
+
+        if (id != record.Id)
+        {
+            return BadRequest();
+        }
+
+        var updatedRecord = await _repositories.UpdateStudyRecord(record);
+        return updatedRecord;
     }
 
     [HttpDelete("{id}")]
