@@ -38,12 +38,22 @@ function App() {
   });
 
   const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>(studyRecordsFakeData);
+  const [loadig, setLoading] = useState<boolean>(true);
 
   //useEffect(() => {
   //  axios.get<Array<StudyRecord>>("api/studyrecord").then((res) => {
   //    setStudyRecords(res.data);
   //  });
   //}, []);
+
+  useEffect(() => {
+    axios.get<Array<StudyRecord>>("api/studyrecord").then((res) => {
+      setStudyRecords(res.data);
+    });
+    setLoading(false);
+  }, []);
+
+  
 
   const { open, onOpen, onClose, onToggle } = useDisclosure();
 
@@ -129,26 +139,30 @@ function App() {
         <Heading as="h1" fontSize="5xl" fontWeight="bold">Study Chrono</Heading>
         <br />
         <h2 style={{ fontWeight: "bold", fontSize: " 3xl" }}>学習記録一覧</h2>
-        <Table.Root variant="line">
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>Title</Table.ColumnHeader>
-              <Table.ColumnHeader>Study Time(h)</Table.ColumnHeader>
-              <Table.ColumnHeader></Table.ColumnHeader>
-              <Table.ColumnHeader></Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {studyRecords.map((record) => (
-              <Table.Row key={record.id}>
-                <Table.Cell>{record.title}</Table.Cell>
-                <Table.Cell>{record.studyTime}</Table.Cell>
-                <Table.Cell><PrimaryButton onClick={() => onClickEdit(record.id)}>編集</PrimaryButton></Table.Cell>
-                <Table.Cell><PrimaryButton onClick={() => onClickDelete(record.id)}>削除</PrimaryButton></Table.Cell>
+        {loadig ?
+          <p>ローディング中...</p>
+          :
+          <Table.Root variant="line">
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader>Title</Table.ColumnHeader>
+                <Table.ColumnHeader>Study Time(h)</Table.ColumnHeader>
+                <Table.ColumnHeader></Table.ColumnHeader>
+                <Table.ColumnHeader></Table.ColumnHeader>
               </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
+            </Table.Header>
+            <Table.Body>
+              {studyRecords.map((record) => (
+                <Table.Row key={record.id}>
+                  <Table.Cell>{record.title}</Table.Cell>
+                  <Table.Cell>{record.studyTime}</Table.Cell>
+                  <Table.Cell><PrimaryButton onClick={() => onClickEdit(record.id)}>編集</PrimaryButton></Table.Cell>
+                  <Table.Cell><PrimaryButton onClick={() => onClickDelete(record.id)}>削除</PrimaryButton></Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        }
         <PrimaryButton onClick={onClickGetInfo}>更新</PrimaryButton>
         <br />
         <PrimaryButton onClick={onClickAdd}>新規登録</PrimaryButton>
