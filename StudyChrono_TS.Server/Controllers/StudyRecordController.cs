@@ -19,7 +19,7 @@ public class StudyRecordController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task< ActionResult<IEnumerable<StudyRecord>>> GetStudyRecords()
+    public async Task<ActionResult<IEnumerable<StudyRecord>>> GetStudyRecords()
     {
         var records = await _repositories.GetStudyRecords();
         if (records == null || records.Count() == 0)
@@ -36,7 +36,7 @@ public class StudyRecordController : ControllerBase
     public async Task<ActionResult<StudyRecord>> AddStudyRecord(StudyRecord record)
     {
         var newRecord = await _repositories.AddStudyRecord(record);
-        return CreatedAtAction("GetProduct", newRecord);
+        return CreatedAtAction(null, new { id = newRecord.Id }, newRecord);
     }
 
     [HttpPut("{id}")]
@@ -74,5 +74,21 @@ public class StudyRecordController : ControllerBase
         await _repositories.DeleteStudyRecord(id);
         return NoContent();
     }
+
+
+    /// <summary>
+    /// Gets a specific study record.
+    /// </summary>
+    /// <param name="id">The ID of the study record to retrieve.</param>
+    /// <returns>The specific study record.</returns>
+    [HttpGet("{id}", Name = "GetRecord")]
+    public IEnumerable<string> GetProduct(int id)
+    {
+        return new List<string>
+        {
+            $"This message is from Target ID :{id}"
+        };
+    }
+
 
 }
