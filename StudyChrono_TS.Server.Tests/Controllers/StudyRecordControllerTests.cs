@@ -86,4 +86,57 @@ public class StudyRecordControllerTests
         Assert.AreEqual("StudyRecord1", newRecord.Title);
         Assert.AreEqual(10, newRecord.StudyTime);
     }
+
+    [TestMethod()]
+    public async Task UpdateStudyRecord_Ok()
+    {
+        // Arrange
+        var mockRepository = new Mock<IRepositories>();
+        //mockRepository.Setup(repo => repo.UpdateStudyRecord(It.IsAny<int>(), It.IsAny<StudyRecord>())).ReturnsAsync(new StudyRecord() { Id = 2, Title = "StudyRecord1", StudyTime = 10 });
+        var controller = new StudyRecordController(mockRepository.Object);
+        var record = new StudyRecord() { Id = 1, Title = "StudyRecord1", StudyTime = 10 };
+
+        // Act
+        ActionResult<StudyRecord> result = await controller.UpdateStudyRecord(1, record);
+        var statusCode = ApiTestHelper.GetStatusCode(result);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual((int)HttpStatusCode.OK, statusCode);
+    }
+
+    [TestMethod()]
+    public async Task DeleteStudyRecord_NoContents()
+    {
+        // Arrange
+        var mockRepository = new Mock<IRepositories>();
+        mockRepository.Setup(repo => repo.FindStudyRecord(It.IsAny<int>())).ReturnsAsync(true);
+        mockRepository.Setup(repo => repo.DeleteStudyRecord(It.IsAny<int>()));
+        var controller = new StudyRecordController(mockRepository.Object);
+
+        // Act
+        ActionResult<StudyRecord> result = await controller.DeleteStudyRecord(1);
+        var statusCode = ApiTestHelper.GetStatusCode(result);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual((int)HttpStatusCode.NoContent, statusCode);
+    }
+
+    [TestMethod()]
+    public async Task DeleteStudyRecord_NotFound()
+    {
+        // Arrange
+        var mockRepository = new Mock<IRepositories>();
+        mockRepository.Setup(repo => repo.FindStudyRecord(It.IsAny<int>())).ReturnsAsync(false);
+        var controller = new StudyRecordController(mockRepository.Object);
+
+        // Act
+        ActionResult<StudyRecord> result = await controller.DeleteStudyRecord(1);
+        var statusCode = ApiTestHelper.GetStatusCode(result);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual((int)HttpStatusCode.NotFound, statusCode);
+    }
 }

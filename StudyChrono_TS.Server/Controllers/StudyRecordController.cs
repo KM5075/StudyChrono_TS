@@ -52,7 +52,14 @@ public class StudyRecordController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<StudyRecord>> DeleteStudyRecord(int id)
     {
-        throw new NotImplementedException();
+        var exist = await _repositories.FindStudyRecord(id);
+        if (!exist)
+        {
+            return NotFound();
+        }
+
+        await _repositories.DeleteStudyRecord(id);
+        return NoContent();
     }
 
 }

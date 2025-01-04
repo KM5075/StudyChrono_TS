@@ -24,6 +24,11 @@ public class Repository : IRepositories
         throw new NotImplementedException();
     }
 
+    public async Task<bool> FindStudyRecord(int id)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task DeleteStudyRecord(int id)
     {
         throw new NotImplementedException();
