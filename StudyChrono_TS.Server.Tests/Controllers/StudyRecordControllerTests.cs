@@ -62,4 +62,28 @@ public class StudyRecordControllerTests
         Assert.AreEqual((int)HttpStatusCode.NoContent, statusCode);
         Assert.IsNull(records);
     }
+
+    [TestMethod()]
+    public async Task AddStudyRecord_Ok()
+    {
+        // Arrange
+        var mockRepository = new Mock<IRepositories>();
+        mockRepository.Setup(repo => repo.AddStudyRecord(It.IsAny<StudyRecord>())).ReturnsAsync(new StudyRecord() { Id = 2, Title = "StudyRecord1", StudyTime = 10 });
+        var controller = new StudyRecordController(mockRepository.Object);
+        var record = new StudyRecord() { Id = 1, Title = "StudyRecord1", StudyTime = 10 };
+
+        // Act
+        ActionResult<StudyRecord> result = await controller.AddStudyRecord(record);
+        var actionResult = result.Result as CreatedAtActionResult;
+        var newRecord = actionResult.Value as StudyRecord;
+        var statusCode = ApiTestHelper.GetStatusCode(result);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual((int)HttpStatusCode.Created, statusCode);
+        Assert.IsNotNull(newRecord);
+        Assert.AreEqual(2, newRecord.Id);
+        Assert.AreEqual("StudyRecord1", newRecord.Title);
+        Assert.AreEqual(10, newRecord.StudyTime);
+    }
 }
