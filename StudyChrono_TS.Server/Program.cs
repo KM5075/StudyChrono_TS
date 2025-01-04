@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using StudyChrono_TS.Server.Data;
 using StudyChrono_TS.Server.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,21 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+}
+else
+{
+    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+}
+
+builder.Services.AddDbContext<StudyChronoDbContext>(options =>
+    options.UseSqlServer(connection));
+
 
 builder.Services.AddScoped<IRepositories,Repository>();
 
