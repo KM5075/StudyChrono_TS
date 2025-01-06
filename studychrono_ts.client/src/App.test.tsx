@@ -3,6 +3,39 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import App from "./App";
+import axios from "axios";
+
+
+//jest.mock("axios", () => {
+//  return {
+//    get: () => mockGetStudyRecords,
+
+//  };
+//});
+const mockData = [
+  {
+    id: 1,
+    title: "TypeScript-mock",
+    studyTime: 1,
+  },
+  {
+    id: 2,
+    title: "React-mock",
+    studyTime: 2,
+  },
+  {
+    id: 3,
+    title: "Next.js-mock",
+    studyTime: 3,
+  },
+];
+
+
+jest.mock('axios', () => ({
+  get: jest.fn(() => Promise.resolve({ data: mockData })),
+}));
+
+
 
 describe('App Page Test', () => {
   beforeEach(() => {
@@ -25,22 +58,23 @@ describe('App Page Test', () => {
         <App />
       </ChakraProvider>
     );
+    await waitFor(() => screen.getByTestId("table"));
 
     expect(screen.getByText('Title')).toBeInTheDocument();
     expect(screen.getByText('Study Time(h)')).toBeInTheDocument();
   });
 
-  it('should render "table data"', async () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <App />
-      </ChakraProvider>
-    );
+  //it('should render "table data"', async () => {
+  //  render(
+  //    <ChakraProvider value={defaultSystem}>
+  //      <App />
+  //    </ChakraProvider>
+  //  );
 
-    expect(screen.getByText('TypeScript')).toBeInTheDocument();
-    expect(screen.getByText('React')).toBeInTheDocument();
-    expect(screen.getByText('Next.js')).toBeInTheDocument();
-  });
+  //  expect(screen.getByText('TypeScript')).toBeInTheDocument();
+  //  expect(screen.getByText('React')).toBeInTheDocument();
+  //  expect(screen.getByText('Next.js')).toBeInTheDocument();
+  //});
 
   it('should render "Add Button"', async () => {
     render(
@@ -119,6 +153,40 @@ describe('App Page Test', () => {
     userEvent.click(submitButton);
 
     expect(await screen.findByText('Time must be greater than 0')).toBeInTheDocument();
+  });
+
+  it('テーブルにデータが表示されること', async () => {
+
+    // const mockData = [
+    //   {
+    //     id: 1,
+    //     title: "TypeScript test",
+    //     studyTime: 1,
+    //   },
+    //   {
+    //     id: 2,
+    //     title: "React",
+    //     studyTime: 2,
+    //   },
+    //   {
+    //     id: 3,
+    //     title: "Next.js",
+    //     studyTime: 3,
+    //   },
+    // ];
+
+    // (axios.get as jest.Mock).mockResolvedValue({ data: mockData });
+    render(
+      <ChakraProvider value={defaultSystem}>
+        <App />
+      </ChakraProvider>
+    );
+
+    await waitFor(() => { screen.getByTestId("table"); });
+    const records = screen.getByTestId("table").querySelectorAll("tbody tr");
+    screen.debug();
+
+    expect(records.length).toBe(3);
   });
 
 });

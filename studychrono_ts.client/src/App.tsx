@@ -47,13 +47,21 @@ function App() {
   //}, []);
 
   useEffect(() => {
-    axios.get<Array<StudyRecord>>("api/studyrecord").then((res) => {
-      setStudyRecords(res.data);
-    });
-    setLoading(false);
+    const getAllRecords = async () => {
+      const records = await getStudyRecords();
+      setStudyRecords(records);
+      setLoading(false);
+    }
+
+    getAllRecords();
   }, []);
 
-  
+  async function getStudyRecords(): Promise<StudyRecord[]> {
+    const res = await axios.get<Array<StudyRecord>>("api/studyrecord");
+    return res.data;
+  }
+
+
 
   const { open, onOpen, onClose, onToggle } = useDisclosure();
 
@@ -138,11 +146,11 @@ function App() {
         <br />
         <Heading as="h1" fontSize="5xl" fontWeight="bold">Study Chrono</Heading>
         <br />
-        <h2 style={{ fontWeight: "bold", fontSize: " 3xl" }}>学習記録一覧</h2>
+        <h2 style={{ fontWeight: "bold", fontSize: " 3xl" }} >学習記録一覧</h2>
         {loadig ?
           <p>ローディング中...</p>
           :
-          <Table.Root variant="line">
+          <Table.Root variant="line" data-testid="table">
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeader>Title</Table.ColumnHeader>
