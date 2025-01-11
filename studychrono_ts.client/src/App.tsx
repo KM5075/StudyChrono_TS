@@ -7,6 +7,7 @@ import { toaster, Toaster } from './components/ui/toaster';
 import { useForm } from 'react-hook-form';
 import StudyRecordDetail from './components/organisms/StudyRecordDetail';
 import axios from 'axios';
+import { getStudyRecords } from './utils/ApiAccess';
 
 const studyRecordsFakeData: Array<StudyRecord> = [
   {
@@ -27,7 +28,27 @@ const studyRecordsFakeData: Array<StudyRecord> = [
 ];
 
 function App() {
-  const [onSubmit, setOnSubmit] = useState<() => void>(() => { });
+  const [count, setCount] = useState<number>(0);
+  const [onClickCount, setOnClickCount] = useState<() => void>();
+
+  const IncrementOne = () => {
+    setCount(count + 1);
+  }
+  const IncrementTwo = () => {
+    setCount(count + 2);
+  }
+
+  const onClickIncrementOne = () => {
+    setOnClickCount(IncrementOne);
+  }
+
+  const onClickIncrementTwo = () => {
+    setOnClickCount(IncrementTwo);
+  }
+
+
+  // const [onSubmit, setOnSubmit] = useState<() => Promise<void>>(() => Promise.resolve());
+  const [onSubmit, setOnSubmit] = useState<() => Promise<void>>(() => Promise.resolve());
   const { register, handleSubmit, formState: { errors }, reset } = useForm<StudyRecord>({
     criteriaMode: "all",
     defaultValues: {
@@ -56,16 +77,18 @@ function App() {
     getAllRecords();
   }, []);
 
-  async function getStudyRecords(): Promise<StudyRecord[]> {
-    const res = await axios.get<Array<StudyRecord>>("api/studyrecord");
-    return res.data;
-  }
+  /*   async function getStudyRecords(): Promise<StudyRecord[]> {
+      const res = await axios.get<Array<StudyRecord>>("api/studyrecord");
+      return res.data;
+     */
 
 
 
   const { open, onOpen, onClose, onToggle } = useDisclosure();
 
   const onSubmitAdd = handleSubmit((data: StudyRecord) => {
+
+    console.log('Start adding');
     data.id = 0; // 仮のIDを設定
     axios.post<StudyRecord>("api/studyrecord", data).then((res) => {
       console.log(res.data);
@@ -79,18 +102,25 @@ function App() {
       });
     });
   })
-
+  // const onSubmitEdit = handleSubmit((data: StudyRecord) => {
   const onSubmitEdit = handleSubmit((data: StudyRecord) => {
+    console.log(data);
     axios.put<StudyRecord>(`api/studyrecord/${data.id}`, data).then((res) => {
+      console.log('Start updating');
       console.log(res.data);
+      const updatedRecord = res.data;
+      console.log(updatedRecord);
       const newStudyRecords = studyRecords.map((record) => {
-        if (record.id === data.id) {
-          return data;
+        if (record.id === updatedRecord.id) {
+          return updatedRecord;
         }
         return record;
       });
-      setStudyRecords(newStudyRecords);
+      console.log(newStudyRecords);
+      console.log('End updating');
       onClose();
+      console.log('Close dialog');
+      setStudyRecords(newStudyRecords);
       toaster.create({
         title: "更新完了",
         description: "学習記録を更新しました",
@@ -101,11 +131,17 @@ function App() {
   });
 
   const onClickEdit = (id: number) => {
+    console.log('Edit button clicked');
     const targetRecord = studyRecords.find((record) => record.id === id);
     if (targetRecord) {
+      console.log('Record found');
       setOnSubmit(() => onSubmitEdit);
       reset(targetRecord);
       onOpen();
+      console.log('Dialog opened');
+    }
+    else {
+      console.log('Record not found');
     }
   }
 
@@ -175,6 +211,10 @@ function App() {
         <br />
         <PrimaryButton onClick={onClickAdd}>新規登録</PrimaryButton>
         <StudyRecordDetail open={open} onToggle={onToggle} onSubmit={onSubmit} errors={errors} register={register} />
+        <p>Count is :{count}</p>
+        <PrimaryButton onClick={onClickCount}>Increment Click</PrimaryButton>
+        <PrimaryButton onClick={onClickIncrementOne}>Increment One</PrimaryButton>
+        <PrimaryButton onClick={onClickIncrementTwo}>Increment Two</PrimaryButton>
       </ChakraProvider>
     </>
   );

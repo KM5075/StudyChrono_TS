@@ -19,7 +19,7 @@ import { StudyRecord } from "../../types/api/StudyRecord";
 type Props = {
     open: boolean;
     onToggle: () => void;
-    onSubmit: () => void;
+    onSubmit: () => Promise<void>;
     errors: FieldErrors<StudyRecord>;
     register: UseFormRegister<StudyRecord>;
 }
@@ -36,13 +36,13 @@ const StudyRecordDetail: FC<Props> = (props) => {
                     <form onSubmit={onSubmit}>
                         <DialogBody>
                             <Field label="Title" invalid={!!errors.title} errorText={errors.title?.message}>
-                                <Input bg="white" placeholder="Study Title"
+                                <Input bg="white" placeholder="Study Title" data-testid="input-title"
                                     {...register("title", {
                                         required: "Title is required",
                                     })} />
                             </Field>
                             <Field label="Time(h)" invalid={!!errors.studyTime} errorText={errors.studyTime?.message}>
-                                <Input bg="white" placeholder="Time" type="number"
+                                <Input bg="white" placeholder="Time" type="number" data-testid="input-time"
                                     {...register("studyTime", {
                                         required: { value: true, message: "Study Time is required" },
                                         min: { value: 1, message: "Time must be greater than 0" }
