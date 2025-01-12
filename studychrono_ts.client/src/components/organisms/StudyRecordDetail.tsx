@@ -18,6 +18,7 @@ import { StudyRecord } from "../../types/api/StudyRecord";
 
 type Props = {
     open: boolean;
+    title: string;
     onToggle: () => void;
     onSubmit: () => Promise<void>;
     errors: FieldErrors<StudyRecord>;
@@ -25,13 +26,13 @@ type Props = {
 }
 
 const StudyRecordDetail: FC<Props> = (props) => {
-    const { open, onToggle, onSubmit, errors, register } = props;
+    const { open, title, onToggle, onSubmit, errors, register } = props;
     return (
         <>
             <DialogRoot open={open} onOpenChange={onToggle}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>新規登録</DialogTitle>
+                        <DialogTitle>{title}</DialogTitle>
                     </DialogHeader>
                     <form onSubmit={onSubmit}>
                         <DialogBody>

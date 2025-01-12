@@ -21,9 +21,10 @@ function App() {
       studyTime: 0,
     },
   });
-
   const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>([]);
   const [loadig, setLoading] = useState<boolean>(true);
+  const { open, onOpen, onClose, onToggle } = useDisclosure();
+  const [modalTitle, setModalTitle] = useState<string>("");
 
   useEffect(() => {
     const getAllRecords = async () => {
@@ -34,8 +35,6 @@ function App() {
 
     getAllRecords();
   }, []);
-
-  const { open, onOpen, onClose, onToggle } = useDisclosure();
 
   /**
    * @function Submit処理
@@ -113,6 +112,7 @@ function App() {
     const targetRecord = studyRecords.find((record) => record.id === id);
     if (targetRecord) {
       console.log('Record found');
+      setModalTitle("学習記録編集");
       setIsEdit(true);
       reset(targetRecord);
       onOpen();
@@ -127,6 +127,7 @@ function App() {
    * 新規登録ボタンクリック時の処理
    */
   const onClickAdd = () => {
+    setModalTitle("新規登録");
     setIsEdit(false);
     reset({
       id: 0,
@@ -160,7 +161,7 @@ function App() {
       <ChakraProvider value={theme}>
         <Toaster />
         <br />
-        <Box px={{ base: 4, md: 300 }} py={10}>
+        <Box px={{ base: 4, sm: 50, xl: 400 }} py={10}>
           <Heading as="h1" size="4xl" mb={4} color={"teal"}>Study Chrono</Heading>
           <br />
           {loadig ?
@@ -189,7 +190,7 @@ function App() {
           }
           <br />
           <PrimaryButton onClick={onClickAdd}>新規登録</PrimaryButton>
-          <StudyRecordDetail open={open} onToggle={onToggle} onSubmit={onSubmitFunc} errors={errors} register={register} />
+          <StudyRecordDetail open={open} title={modalTitle} onToggle={onToggle} onSubmit={onSubmitFunc} errors={errors} register={register} />
         </Box>
       </ChakraProvider>
     </>
