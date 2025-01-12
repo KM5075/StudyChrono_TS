@@ -11,11 +11,19 @@ public class StudyRecordController : ControllerBase
 {
     private readonly IRepositories _repositories;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StudyRecordController"/> class.
+    /// </summary>
+    /// <param name="repositories">The repositories.</param>
     public StudyRecordController(IRepositories repositories)
     {
         _repositories = repositories;
     }
 
+    /// <summary>
+    /// Retrieves all study records.
+    /// </summary>
+    /// <returns>A list of study records.</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -30,6 +38,11 @@ public class StudyRecordController : ControllerBase
         return records.ToList();
     }
 
+    /// <summary>
+    /// Adds a new study record.
+    /// </summary>
+    /// <param name="record">The study record to add.</param>
+    /// <returns>The created study record.</returns>
     [HttpPost()]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -39,6 +52,12 @@ public class StudyRecordController : ControllerBase
         return CreatedAtAction(null, new { id = newRecord.Id }, newRecord);
     }
 
+    /// <summary>
+    /// Updates a study record.
+    /// </summary>
+    /// <param name="id">The ID of the study record to update.</param>
+    /// <param name="record">The updated study record.</param>
+    /// <returns>The updated study record.</returns>
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -60,6 +79,11 @@ public class StudyRecordController : ControllerBase
         return updatedRecord;
     }
 
+    /// <summary>
+    /// Deletes a study record.
+    /// </summary>
+    /// <param name="id">The ID of the study record to delete.</param>
+    /// <returns>No content.</returns>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -75,7 +99,6 @@ public class StudyRecordController : ControllerBase
         return NoContent();
     }
 
-
     /// <summary>
     /// Gets a specific study record.
     /// </summary>
@@ -89,6 +112,4 @@ public class StudyRecordController : ControllerBase
             $"This message is from Target ID :{id}"
         };
     }
-
-
 }
