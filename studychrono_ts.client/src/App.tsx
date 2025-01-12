@@ -178,7 +178,7 @@ function App() {
               </Table.Header>
               <Table.Body>
                 {studyRecords.map((record) => (
-                  <Table.Row key={record.id}>
+                  <Table.Row key={record.id} _hover={{ bg: "gray.100" }}>
                     <Table.Cell>{record.title}</Table.Cell>
                     <Table.Cell>{record.studyTime}</Table.Cell>
                     <Table.Cell><EditIconButton onClick={() => onClickEdit(record.id)} /></Table.Cell>
