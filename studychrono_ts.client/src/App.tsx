@@ -54,6 +54,7 @@ function App() {
   const { open, onOpen, onClose, onToggle } = useDisclosure();
 
   const onSubmitFunc = handleSubmit((data: StudyRecord) => {
+    console.log(data);
     if (isEdit) {
       onSubmitEdit();
     } else {
