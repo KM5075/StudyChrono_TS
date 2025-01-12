@@ -163,13 +163,12 @@ function App() {
         <Box px={{ base: 4, md: 300 }} py={10}>
           <Heading as="h1" size="4xl" mb={4} color={"teal"}>Study Chrono</Heading>
           <br />
-          <h2 style={{ fontWeight: "bold", fontSize: " 3xl" }} >学習記録一覧</h2>
           {loadig ?
             <p>ローディング中...</p>
             :
             <Table.Root variant="line" data-testid="table">
               <Table.Header>
-                <Table.Row>
+                <Table.Row bg={"teal.50"}>
                   <Table.ColumnHeader>Title</Table.ColumnHeader>
                   <Table.ColumnHeader>Study Time(h)</Table.ColumnHeader>
                   <Table.ColumnHeader></Table.ColumnHeader>
