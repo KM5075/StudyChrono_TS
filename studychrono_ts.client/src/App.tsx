@@ -1,4 +1,4 @@
-import { ChakraProvider, Heading, Table, useDisclosure } from '@chakra-ui/react';
+import { Box, ChakraProvider, Heading, Table, useDisclosure } from '@chakra-ui/react';
 import theme from './theme/theme';
 import PrimaryButton from './components/atoms/PrimaryButton';
 import { StudyRecord } from './types/api/StudyRecord';
@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import StudyRecordDetail from './components/organisms/StudyRecordDetail';
 import axios from 'axios';
 import { getStudyRecords } from './utils/ApiAccess';
+import { EditIconButton } from './components/atoms/EditIconButton';
+import { DeleteIconButton } from './components/atoms/DeleteIconButton';
 
 function App() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -19,9 +21,10 @@ function App() {
       studyTime: 0,
     },
   });
-
   const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>([]);
   const [loadig, setLoading] = useState<boolean>(true);
+  const { open, onOpen, onClose, onToggle } = useDisclosure();
+  const [modalTitle, setModalTitle] = useState<string>("");
 
   useEffect(() => {
     const getAllRecords = async () => {
@@ -32,8 +35,6 @@ function App() {
 
     getAllRecords();
   }, []);
-
-  const { open, onOpen, onClose, onToggle } = useDisclosure();
 
   /**
    * @function Submit処理
@@ -111,6 +112,7 @@ function App() {
     const targetRecord = studyRecords.find((record) => record.id === id);
     if (targetRecord) {
       console.log('Record found');
+      setModalTitle("学習記録編集");
       setIsEdit(true);
       reset(targetRecord);
       onOpen();
@@ -125,6 +127,7 @@ function App() {
    * 新規登録ボタンクリック時の処理
    */
   const onClickAdd = () => {
+    setModalTitle("新規登録");
     setIsEdit(false);
     reset({
       id: 0,
@@ -158,36 +161,37 @@ function App() {
       <ChakraProvider value={theme}>
         <Toaster />
         <br />
-        <Heading as="h1" fontSize="5xl" fontWeight="bold">Study Chrono</Heading>
-        <br />
-        <h2 style={{ fontWeight: "bold", fontSize: " 3xl" }} >学習記録一覧</h2>
-        {loadig ?
-          <p>ローディング中...</p>
-          :
-          <Table.Root variant="line" data-testid="table">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader>Title</Table.ColumnHeader>
-                <Table.ColumnHeader>Study Time(h)</Table.ColumnHeader>
-                <Table.ColumnHeader></Table.ColumnHeader>
-                <Table.ColumnHeader></Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {studyRecords.map((record) => (
-                <Table.Row key={record.id}>
-                  <Table.Cell>{record.title}</Table.Cell>
-                  <Table.Cell>{record.studyTime}</Table.Cell>
-                  <Table.Cell><PrimaryButton onClick={() => onClickEdit(record.id)}>編集</PrimaryButton></Table.Cell>
-                  <Table.Cell><PrimaryButton onClick={() => onClickDelete(record.id)}>削除</PrimaryButton></Table.Cell>
+        <Box px={{ base: 4, sm: 50, xl: 400 }} py={10}>
+          <Heading as="h1" size="4xl" mb={4} color={"teal"}>Study Chrono</Heading>
+          <br />
+          {loadig ?
+            <p>ローディング中...</p>
+            :
+            <Table.Root variant="line" data-testid="table">
+              <Table.Header>
+                <Table.Row bg={"teal.50"}>
+                  <Table.ColumnHeader>Title</Table.ColumnHeader>
+                  <Table.ColumnHeader>Study Time(h)</Table.ColumnHeader>
+                  <Table.ColumnHeader></Table.ColumnHeader>
+                  <Table.ColumnHeader></Table.ColumnHeader>
                 </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-        }
-        <br />
-        <PrimaryButton onClick={onClickAdd}>新規登録</PrimaryButton>
-        <StudyRecordDetail open={open} onToggle={onToggle} onSubmit={onSubmitFunc} errors={errors} register={register} />
+              </Table.Header>
+              <Table.Body>
+                {studyRecords.map((record) => (
+                  <Table.Row key={record.id} _hover={{ bg: "gray.100" }}>
+                    <Table.Cell>{record.title}</Table.Cell>
+                    <Table.Cell>{record.studyTime}</Table.Cell>
+                    <Table.Cell><EditIconButton onClick={() => onClickEdit(record.id)} /></Table.Cell>
+                    <Table.Cell><DeleteIconButton onClick={() => onClickDelete(record.id)} /></Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Root>
+          }
+          <br />
+          <PrimaryButton onClick={onClickAdd}>新規登録</PrimaryButton>
+          <StudyRecordDetail open={open} title={modalTitle} onToggle={onToggle} onSubmit={onSubmitFunc} errors={errors} register={register} />
+        </Box>
       </ChakraProvider>
     </>
   );
