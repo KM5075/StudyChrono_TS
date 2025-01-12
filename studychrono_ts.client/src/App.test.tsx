@@ -47,8 +47,6 @@ jest.mock('axios', () => ({
   delete: jest.fn(() => Promise.resolve({ data: mockDeleteData })),
 }));
 
-
-
 describe('App Page Test', () => {
   beforeEach(() => {
     (globalThis as any).IS_REACT_ACT_ENVIRONMENT = false;

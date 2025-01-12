@@ -9,24 +9,6 @@ import StudyRecordDetail from './components/organisms/StudyRecordDetail';
 import axios from 'axios';
 import { getStudyRecords } from './utils/ApiAccess';
 
-const studyRecordsFakeData: Array<StudyRecord> = [
-  {
-    id: 1,
-    title: 'TypeScript',
-    studyTime: 1,
-  },
-  {
-    id: 2,
-    title: 'React',
-    studyTime: 2,
-  },
-  {
-    id: 3,
-    title: 'Next.js',
-    studyTime: 3,
-  },
-];
-
 function App() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<StudyRecord>({
@@ -38,7 +20,7 @@ function App() {
     },
   });
 
-  const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>(studyRecordsFakeData);
+  const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>([]);
   const [loadig, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -144,13 +126,6 @@ function App() {
     });
   }
 
-  const onClickGetInfo = () => {
-    axios.get<Array<StudyRecord>>("api/studyRecord").then((res) => {
-      console.log(res.data);
-      setStudyRecords(res.data);
-    });
-  }
-
   return (
     <>
       <ChakraProvider value={theme}>
@@ -183,7 +158,6 @@ function App() {
             </Table.Body>
           </Table.Root>
         }
-        <PrimaryButton onClick={onClickGetInfo}>更新</PrimaryButton>
         <br />
         <PrimaryButton onClick={onClickAdd}>新規登録</PrimaryButton>
         <StudyRecordDetail open={open} onToggle={onToggle} onSubmit={onSubmitFunc} errors={errors} register={register} />
