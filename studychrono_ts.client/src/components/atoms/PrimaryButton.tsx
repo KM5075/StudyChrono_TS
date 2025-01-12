@@ -9,7 +9,7 @@ type Props = {
 const PrimaryButton: FC<Props> = (props) => {
     const { children, onClick } = props;
     return (
-        <Button bg={"teal"} onClick={onClick}>{children}</Button>
+        <Button bg={"teal"} onClick={onClick} borderRadius={50} _hover={{ opacity: 0.8 }}> {children}</Button >
     );
 }
 
