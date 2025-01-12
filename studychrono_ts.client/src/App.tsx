@@ -4,7 +4,7 @@ import PrimaryButton from './components/atoms/PrimaryButton';
 import { StudyRecord } from './types/api/StudyRecord';
 import { useEffect, useState, } from 'react';
 import { toaster, Toaster } from './components/ui/toaster';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import StudyRecordDetail from './components/organisms/StudyRecordDetail';
 import axios from 'axios';
 import { getStudyRecords } from './utils/ApiAccess';
@@ -28,26 +28,6 @@ const studyRecordsFakeData: Array<StudyRecord> = [
 ];
 
 function App() {
-  const [count, setCount] = useState<number>(0);
-  const [onClickCount, setOnClickCount] = useState<() => void>();
-
-  const IncrementOne = () => {
-    setCount(count + 1);
-  }
-  const IncrementTwo = () => {
-    setCount(count + 2);
-  }
-
-  const onClickIncrementOne = () => {
-    setOnClickCount(IncrementOne);
-  }
-
-  const onClickIncrementTwo = () => {
-    setOnClickCount(IncrementTwo);
-  }
-
-
-  // const [onSubmit, setOnSubmit] = useState<() => Promise<void>>(() => Promise.resolve());
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<StudyRecord>({
     criteriaMode: "all",
@@ -61,12 +41,6 @@ function App() {
   const [studyRecords, setStudyRecords] = useState<Array<StudyRecord>>(studyRecordsFakeData);
   const [loadig, setLoading] = useState<boolean>(true);
 
-  //useEffect(() => {
-  //  axios.get<Array<StudyRecord>>("api/studyrecord").then((res) => {
-  //    setStudyRecords(res.data);
-  //  });
-  //}, []);
-
   useEffect(() => {
     const getAllRecords = async () => {
       const records = await getStudyRecords();
@@ -76,13 +50,6 @@ function App() {
 
     getAllRecords();
   }, []);
-
-  /*   async function getStudyRecords(): Promise<StudyRecord[]> {
-      const res = await axios.get<Array<StudyRecord>>("api/studyrecord");
-      return res.data;
-     */
-
-
 
   const { open, onOpen, onClose, onToggle } = useDisclosure();
 
@@ -110,7 +77,6 @@ function App() {
       });
     });
   });
-  // const onSubmitEdit = handleSubmit((data: StudyRecord) => {
   const onSubmitEdit = handleSubmit((data: StudyRecord) => {
     console.log(data);
     axios.put<StudyRecord>(`api/studyrecord/${data.id}`, data).then((res) => {
@@ -144,7 +110,6 @@ function App() {
     const targetRecord = studyRecords.find((record) => record.id === id);
     if (targetRecord) {
       console.log('Record found');
-      // setOnSubmit(() => onSubmitEdit);
       setIsEdit(true);
       reset(targetRecord);
       onOpen();
@@ -157,7 +122,6 @@ function App() {
 
   const onClickAdd = () => {
     setIsEdit(false);
-    // setOnSubmit(() => onSubmitAdd);
     reset({
       id: 0,
       title: "",
@@ -222,10 +186,6 @@ function App() {
         <br />
         <PrimaryButton onClick={onClickAdd}>新規登録</PrimaryButton>
         <StudyRecordDetail open={open} onToggle={onToggle} onSubmit={onSubmitFunc} errors={errors} register={register} />
-        <p>Count is :{count}</p>
-        <PrimaryButton onClick={onClickCount}>Increment Click</PrimaryButton>
-        <PrimaryButton onClick={onClickIncrementOne}>Increment One</PrimaryButton>
-        <PrimaryButton onClick={onClickIncrementTwo}>Increment Two</PrimaryButton>
       </ChakraProvider>
     </>
   );
