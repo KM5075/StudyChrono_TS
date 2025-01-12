@@ -4,7 +4,7 @@ import PrimaryButton from './components/atoms/PrimaryButton';
 import { StudyRecord } from './types/api/StudyRecord';
 import { useEffect, useState, } from 'react';
 import { toaster, Toaster } from './components/ui/toaster';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import StudyRecordDetail from './components/organisms/StudyRecordDetail';
 import axios from 'axios';
 import { getStudyRecords } from './utils/ApiAccess';
@@ -48,7 +48,7 @@ function App() {
 
 
   // const [onSubmit, setOnSubmit] = useState<() => Promise<void>>(() => Promise.resolve());
-  const [onSubmit, setOnSubmit] = useState<() => Promise<void>>(() => Promise.resolve());
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<StudyRecord>({
     criteriaMode: "all",
     defaultValues: {
@@ -86,13 +86,21 @@ function App() {
 
   const { open, onOpen, onClose, onToggle } = useDisclosure();
 
+  const onSubmitFunc = handleSubmit((data: StudyRecord) => {
+    if (isEdit) {
+      onSubmitEdit();
+    } else {
+      onSubmitAdd();
+    }
+  });
+
   const onSubmitAdd = handleSubmit((data: StudyRecord) => {
 
     console.log('Start adding');
-    data.id = 0; // 仮のIDを設定
     axios.post<StudyRecord>("api/studyrecord", data).then((res) => {
       console.log(res.data);
-      setStudyRecords([...studyRecords, data]);
+      const newRecord = res.data;
+      setStudyRecords([...studyRecords, newRecord]);
       reset();
       onClose();
       toaster.create({
@@ -101,7 +109,7 @@ function App() {
         type: "success",
       });
     });
-  })
+  });
   // const onSubmitEdit = handleSubmit((data: StudyRecord) => {
   const onSubmitEdit = handleSubmit((data: StudyRecord) => {
     console.log(data);
@@ -130,12 +138,14 @@ function App() {
     });
   });
 
+
   const onClickEdit = (id: number) => {
     console.log('Edit button clicked');
     const targetRecord = studyRecords.find((record) => record.id === id);
     if (targetRecord) {
       console.log('Record found');
-      setOnSubmit(() => onSubmitEdit);
+      // setOnSubmit(() => onSubmitEdit);
+      setIsEdit(true);
       reset(targetRecord);
       onOpen();
       console.log('Dialog opened');
@@ -146,7 +156,8 @@ function App() {
   }
 
   const onClickAdd = () => {
-    setOnSubmit(() => onSubmitAdd);
+    setIsEdit(false);
+    // setOnSubmit(() => onSubmitAdd);
     reset({
       id: 0,
       title: "",
@@ -210,7 +221,7 @@ function App() {
         <PrimaryButton onClick={onClickGetInfo}>更新</PrimaryButton>
         <br />
         <PrimaryButton onClick={onClickAdd}>新規登録</PrimaryButton>
-        <StudyRecordDetail open={open} onToggle={onToggle} onSubmit={onSubmit} errors={errors} register={register} />
+        <StudyRecordDetail open={open} onToggle={onToggle} onSubmit={onSubmitFunc} errors={errors} register={register} />
         <p>Count is :{count}</p>
         <PrimaryButton onClick={onClickCount}>Increment Click</PrimaryButton>
         <PrimaryButton onClick={onClickIncrementOne}>Increment One</PrimaryButton>

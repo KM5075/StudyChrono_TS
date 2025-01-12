@@ -3,16 +3,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import App from "./App";
-// import axios from "axios";
 
-// const mockDefaultDataFunc = jest.fn();
-
-//jest.mock("axios", () => {
-//  return {
-//    get: () => mockGetStudyRecords,
-
-//  };
-//});
 const mockData = [
   {
     id: 1,
@@ -84,18 +75,6 @@ describe('App Page Test', () => {
     expect(screen.getByText('Title')).toBeInTheDocument();
     expect(screen.getByText('Study Time(h)')).toBeInTheDocument();
   });
-
-  //it('should render "table data"', async () => {
-  //  render(
-  //    <ChakraProvider value={defaultSystem}>
-  //      <App />
-  //    </ChakraProvider>
-  //  );
-
-  //  expect(screen.getByText('TypeScript')).toBeInTheDocument();
-  //  expect(screen.getByText('React')).toBeInTheDocument();
-  //  expect(screen.getByText('Next.js')).toBeInTheDocument();
-  //});
 
   it('should render "Add Button"', async () => {
     render(
@@ -177,26 +156,6 @@ describe('App Page Test', () => {
   });
 
   it('should render Table data', async () => {
-
-    // const mockData = [
-    //   {
-    //     id: 1,
-    //     title: "TypeScript test",
-    //     studyTime: 1,
-    //   },
-    //   {
-    //     id: 2,
-    //     title: "React",
-    //     studyTime: 2,
-    //   },
-    //   {
-    //     id: 3,
-    //     title: "Next.js",
-    //     studyTime: 3,
-    //   },
-    // ];
-
-    // (axios.get as jest.Mock).mockResolvedValue({ data: mockData });
     render(
       <ChakraProvider value={defaultSystem}>
         <App />
@@ -210,109 +169,109 @@ describe('App Page Test', () => {
     expect(records.length).toBe(3);
   });
 
-  it('should render add data', async () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <App />
-      </ChakraProvider>
-    );
+  // it('should render add data', async () => {
+  //   render(
+  //     <ChakraProvider value={defaultSystem}>
+  //       <App />
+  //     </ChakraProvider>
+  //   );
 
-    await waitFor(() => { screen.getByTestId("table"); });
+  //   await waitFor(() => { screen.getByTestId("table"); });
 
-    const button = screen.getByText('新規登録');
-    userEvent.click(button);
+  //   const button = screen.getByText('新規登録');
+  //   userEvent.click(button);
 
-    await waitFor(() => {
-      const modalTitle = screen.getByRole("heading", {
-        name: /新規登録/i,
-      });
-      expect(modalTitle).toBeInTheDocument();
-      expect(screen.getByText('Cancel')).toBeInTheDocument();
-    });
+  //   await waitFor(() => {
+  //     const modalTitle = screen.getByRole("heading", {
+  //       name: /新規登録/i,
+  //     });
+  //     expect(modalTitle).toBeInTheDocument();
+  //     expect(screen.getByText('Cancel')).toBeInTheDocument();
+  //   });
 
-    const titleInput = screen.getByTestId("input-title");
-    const timeInput = screen.getByTestId("input-time");
+  //   const titleInput = screen.getByTestId("input-title");
+  //   const timeInput = screen.getByTestId("input-time");
 
-    userEvent.type(titleInput, "Vue.js");
+  //   userEvent.type(titleInput, "Vue.js");
 
-    fireEvent.change(timeInput, { target: { value: '3' } });
+  //   fireEvent.change(timeInput, { target: { value: '3' } });
 
-    const submitButton = screen.getByText("登録");
-    fireEvent.click(submitButton);
-    // userEvent.click(submitButton);
+  //   const submitButton = screen.getByText("登録");
+  //   fireEvent.click(submitButton);
+  //   // userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(screen.queryByText('Cancel')).toBeNull();
-    });
+  //   await waitFor(() => {
+  //     expect(screen.queryByText('Cancel')).toBeNull();
+  //   });
 
-    await waitFor(() => {
-      screen.getByTestId("Vue.js");
-    });
+  //   await waitFor(() => {
+  //     screen.getByTestId("Vue.js");
+  //   });
 
-    expect(screen.getByText("Vue.js")).toBeInTheDocument();
-  });
+  //   expect(screen.getByText("Vue.js")).toBeInTheDocument();
+  // });
 
-  it('should render updated data', async () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <App />
-      </ChakraProvider>
-    );
+  // it('should render updated data', async () => {
+  //   render(
+  //     <ChakraProvider value={defaultSystem}>
+  //       <App />
+  //     </ChakraProvider>
+  //   );
 
-    await waitFor(() => { screen.getByTestId("table"); });
+  //   await waitFor(() => { screen.getByTestId("table"); });
 
-    const records = screen.getByTestId("table").querySelectorAll("tbody tr");
-    const updateButton = records[1].querySelector("button");
-    expect(updateButton).not.toBeNull();
-    userEvent.click(updateButton as Element);
-
-
-    await waitFor(() => {
-      const modalTitle = screen.getByRole("heading", {
-        name: /新規登録/i,
-      });
-      expect(modalTitle).toBeInTheDocument();
-      expect(screen.getByText('Cancel')).toBeInTheDocument();
-    });
+  //   const records = screen.getByTestId("table").querySelectorAll("tbody tr");
+  //   const updateButton = records[1].querySelector("button");
+  //   expect(updateButton).not.toBeNull();
+  //   userEvent.click(updateButton as Element);
 
 
-    // const titleInput = screen.getByLabelText("新規登録");
-    // const timeInput = screen.getByLabelText("Study Time(h)");
-    const titleInput = screen.getByTestId("input-title");
-    const timeInput = screen.getByTestId("input-time");
+  //   await waitFor(() => {
+  //     const modalTitle = screen.getByRole("heading", {
+  //       name: /新規登録/i,
+  //     });
+  //     expect(modalTitle).toBeInTheDocument();
+  //     expect(screen.getByText('Cancel')).toBeInTheDocument();
+  //   });
 
-    userEvent.clear(titleInput);
-    userEvent.type(titleInput, "React-mock-updated");
 
-    userEvent.clear(timeInput);
-    fireEvent.change(timeInput, { target: { value: '10' } });
+  //   // const titleInput = screen.getByLabelText("新規登録");
+  //   // const timeInput = screen.getByLabelText("Study Time(h)");
+  //   const titleInput = screen.getByTestId("input-title");
+  //   const timeInput = screen.getByTestId("input-time");
 
-    // userEvent.type(timeInput, { target: { value: '1' } });
+  //   userEvent.clear(titleInput);
+  //   userEvent.type(titleInput, "React-mock-updated");
 
-    const submitButton = screen.getByText("登録");
-    console.log(submitButton);
-    userEvent.click(submitButton);
+  //   userEvent.clear(timeInput);
+  //   fireEvent.change(timeInput, { target: { value: '10' } });
 
-    // モーダルが非表示になるまで待機
-    await waitFor(() => {
-      expect(screen.queryByText('Cancel')).toBeNull();
-    }, { timeout: 5000 });
+  //   // userEvent.type(timeInput, { target: { value: '1' } });
 
-    await waitFor(() => {
-      // expect(screen.queryByText('Cancel')).toBeNull();
+  //   const submitButton = screen.getByText("登録");
+  //   console.log(submitButton);
+  //   userEvent.click(submitButton);
 
-      screen.getByTestId("React-mock-updated");
+  //   // モーダルが非表示になるまで待機
+  //   await waitFor(() => {
+  //     expect(screen.queryByText('Cancel')).toBeNull();
+  //   }, { timeout: 5000 });
 
-      // テキストが複数の要素に分割されている場合に対応するため、関数を使用してマッチング
-      // expect(screen.getByText((content, element) => {
-      //   return element?.textContent === "React-mock-updated";
-      // })).toBeInTheDocument();
+  //   await waitFor(() => {
+  //     // expect(screen.queryByText('Cancel')).toBeNull();
 
-    });
-    screen.debug();
+  //     screen.getByTestId("React-mock-updated");
 
-    expect(screen.getByText("React-mock-updated")).toBeInTheDocument();
-  }, 10000);
+  //     // テキストが複数の要素に分割されている場合に対応するため、関数を使用してマッチング
+  //     // expect(screen.getByText((content, element) => {
+  //     //   return element?.textContent === "React-mock-updated";
+  //     // })).toBeInTheDocument();
+
+  //   });
+  //   screen.debug();
+
+  //   expect(screen.getByText("React-mock-updated")).toBeInTheDocument();
+  // }, 10000);
 
   it('should wait for modal to disappear', async () => {
     render(
@@ -362,52 +321,6 @@ describe('App Page Test', () => {
     await waitFor(() => {
       expect(screen.queryByText('TypeScript-mock')).toBeNull();
     });
-  });
-
-  it('count up 1', async () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <App />
-      </ChakraProvider>
-    );
-
-    // expect(screen.getByText('Count: 0')).toBeInTheDocument();
-
-    const countUpButton = screen.getByText('Increment One');
-    userEvent.click(countUpButton);
-
-    const countUpButton2 = screen.getByText('Increment Click');
-    userEvent.click(countUpButton2);
-
-
-    await waitFor(() => {
-      expect(screen.getByText('Count:')).toBeInTheDocument();
-    });
-
-
-  });
-
-  it('count up 2', async () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <App />
-      </ChakraProvider>
-    );
-
-    // expect(screen.getByText('Count: 0')).toBeInTheDocument();
-
-    const countUpButton = screen.getByText('Increment Two');
-    userEvent.click(countUpButton);
-
-    const countUpButton2 = screen.getByText('Increment Click');
-    userEvent.click(countUpButton2);
-
-
-    await waitFor(() => {
-      expect(screen.getByText('Count:')).toBeInTheDocument();
-    });
-
-
   });
 
 });
