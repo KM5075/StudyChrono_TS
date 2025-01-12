@@ -35,6 +35,10 @@ function App() {
 
   const { open, onOpen, onClose, onToggle } = useDisclosure();
 
+  /**
+   * @function Submit処理
+   * @param data
+   */
   const onSubmitFunc = handleSubmit((data: StudyRecord) => {
     console.log(data);
     if (isEdit) {
@@ -44,6 +48,11 @@ function App() {
     }
   });
 
+
+
+  /**
+  * 新規登録処理
+  */
   const onSubmitAdd = handleSubmit((data: StudyRecord) => {
 
     console.log('Start adding');
@@ -60,6 +69,10 @@ function App() {
       });
     });
   });
+
+  /**
+   * 編集処理
+   */
   const onSubmitEdit = handleSubmit((data: StudyRecord) => {
     console.log(data);
     axios.put<StudyRecord>(`api/studyrecord/${data.id}`, data).then((res) => {
@@ -88,6 +101,11 @@ function App() {
   });
 
 
+  /**
+   * 編集ボタンクリック時の処理
+   * @param id
+   * @returns
+   * */
   const onClickEdit = (id: number) => {
     console.log('Edit button clicked');
     const targetRecord = studyRecords.find((record) => record.id === id);
@@ -103,6 +121,9 @@ function App() {
     }
   }
 
+  /**
+   * 新規登録ボタンクリック時の処理
+   */
   const onClickAdd = () => {
     setIsEdit(false);
     reset({
@@ -113,6 +134,12 @@ function App() {
     onOpen();
   }
 
+
+  /**
+   * 削除ボタンクリック時の処理
+   * @param id
+   * @returns
+   * */
   const onClickDelete = (id: number) => {
     axios.delete(`api/studyrecord/${id}`).then((res) => {
       console.log(res.data);
