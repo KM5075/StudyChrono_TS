@@ -11,20 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connection = String.Empty;
-if (builder.Environment.IsDevelopment())
-{
-    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
-    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-}
-else
-{
-    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
-}
-
 builder.Services.AddDbContext<StudyChronoDbContext>(options =>
-    options.UseSqlServer(connection));
-
+    options.UseSqlite(builder.Configuration.GetConnectionString("SQLITE_CONNECTIONSTRING") ?? throw new InvalidOperationException("Connection string 'SQLITE_CONNECTIONSTRING' not found.")));
 
 builder.Services.AddScoped<IRepositories,Repository>();
 
