@@ -41,7 +41,7 @@ public class StudyRecordController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest("Error: " + ex.GetType());
         }
     }
 
