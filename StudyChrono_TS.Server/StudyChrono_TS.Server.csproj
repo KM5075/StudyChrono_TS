@@ -32,4 +32,17 @@
     </ProjectReference>
   </ItemGroup>
 
+	<ItemGroup>
+		<None Update="StudyChronoTS.db" >
+			 <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
+		</None>
+		<None Update="StudyChronoTS.db-shm" >
+			 <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
+			</None>
+		<None Update="StudyChronoTS.db-wal" >
+		    <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
+		</None>
+	</ItemGroup>
+
+
 </Project>
