@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -33,9 +33,13 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<None Update="StudyChronoTS.db" >
+		<None Update="StudyChronoTS.db">
 			 <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\DB\" />
 	</ItemGroup>
 
 
