@@ -33,12 +33,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<None Update="StudyChronoTS.db">
-			 <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Folder Include="wwwroot\DB\" />
 	</ItemGroup>
 
