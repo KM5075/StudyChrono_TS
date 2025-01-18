@@ -29,13 +29,20 @@ public class StudyRecordController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<IEnumerable<StudyRecord>>> GetStudyRecords()
     {
-        var records = await _repositories.GetStudyRecords();
-        if (records == null || records.Count() == 0)
+        try
         {
-            return NoContent();
-        }
+            var records = await _repositories.GetStudyRecords();
+            if (records == null || records.Count() == 0)
+            {
+                return NoContent();
+            }
 
-        return records.ToList();
+            return records.ToList();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error: " + ex.GetType());
+        }
     }
 
     /// <summary>
